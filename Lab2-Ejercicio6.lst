@@ -1,0 +1,216 @@
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 19:46:37 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  *************************************************************************
+   2  ***      Lab2-Ejercicio6                                              ***
+   3  ***     Luis Miguel Gomez Londo帽o   201729597                         ***
+   4  ***     Julian David Mendoza Ruiz   201730830                         ***
+   5  *************************************************************************
+   6  Sets
+   7  d dias de la semana /Lunes, Martes , Miercoles, Jueves, Viernes, Sabado, Domingo/
+   8  alias(c,d);
+   9   
+  10  Parameter r(d) requeridos por dia /Lunes 17 , Martes  13, Miercoles  15, Jueves  19, Viernes 14, Sabado  16, Domingo  11/;
+  11   
+  12  table t (c,d) d铆as que trabaja el empleado
+  13              Lunes   Martes  Miercoles       Jueves  Viernes Sabado  Domingo
+  14  Lunes       1       1       1               1       1       0       0
+  15  Martes      0       1       1               1       1       1       0
+  16  Miercoles   0       0       1               1       1       1       1
+  17  Jueves      1       0       0               1       1       1       1
+  18  Viernes     1       1       0               0       1       1       1
+  19  Sabado      1       1       1               0       0       1       1
+  20  Domingo     1       1       1               1       0       0       1;
+  21   
+  22  Positive Variable x(c);
+  23   
+  24  Variable z;
+  25   
+  26  Equations
+  27  funcOBjetivo        Funci贸n objetivo
+  28   
+  29  resDia(d)           Restricci贸n de trabajadores por d铆a
+  30  ;
+  31   
+  32  funcObjetivo        ..  z   =e=  sum(d,x(d));
+  33   
+  34  resDia(d)           ..  sum((c),t(c,d)*x(c)) =g= r(d);
+  35   
+  36  Model model1 /all/ ;
+  37   
+  38  option mip=CPLEX;
+  39  Solve model1 using mip minimizing z;
+  40  Display x.l;
+  41  Display z.l;
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  32.2.0 rc62c018 WEX-WEI
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 19:46:37 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE model1 Using MIP From line 39
+
+
+---- funcOBjetivo  =E=  Funci贸n objetivo
+
+funcOBjetivo..  - x(Lunes) - x(Martes) - x(Miercoles) - x(Jueves) - x(Viernes) - x(Sabado) - x(Domingo) + z =E= 0 ; (LHS = 0)
+     
+
+---- resDia  =G=  Restricci贸n de trabajadores por d铆a
+
+resDia(Lunes)..  x(Lunes) + x(Jueves) + x(Viernes) + x(Sabado) + x(Domingo) =G= 17 ; (LHS = 0, INFES = 17 ****)
+     
+resDia(Martes)..  x(Lunes) + x(Martes) + x(Viernes) + x(Sabado) + x(Domingo) =G= 13 ; (LHS = 0, INFES = 13 ****)
+     
+resDia(Miercoles)..  x(Lunes) + x(Martes) + x(Miercoles) + x(Sabado) + x(Domingo) =G= 15 ; (LHS = 0, INFES = 15 ****)
+     
+REMAINING 4 ENTRIES SKIPPED
+
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 19:46:37 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE model1 Using MIP From line 39
+
+
+---- x  
+
+x(Lunes)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1       funcOBjetivo
+        1       resDia(Lunes)
+        1       resDia(Martes)
+        1       resDia(Miercoles)
+        1       resDia(Jueves)
+        1       resDia(Viernes)
+
+x(Martes)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1       funcOBjetivo
+        1       resDia(Martes)
+        1       resDia(Miercoles)
+        1       resDia(Jueves)
+        1       resDia(Viernes)
+        1       resDia(Sabado)
+
+x(Miercoles)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -1       funcOBjetivo
+        1       resDia(Miercoles)
+        1       resDia(Jueves)
+        1       resDia(Viernes)
+        1       resDia(Sabado)
+        1       resDia(Domingo)
+
+REMAINING 4 ENTRIES SKIPPED
+
+---- z  
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       funcOBjetivo
+
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 19:46:37 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE model1 Using MIP From line 39
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS            8
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            8
+NON ZERO ELEMENTS            43
+
+
+GENERATION TIME      =        0.031 SECONDS      4 MB  32.2.0 rc62c018 WEX-WEI
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 19:46:37 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE model1 Using MIP From line 39
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   model1              OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  39
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      1 Optimal                   
+**** OBJECTIVE VALUE               22.3333
+
+ RESOURCE USAGE, LIMIT          0.109 10000000000.000
+ ITERATION COUNT, LIMIT         5    2147483647
+
+IBM ILOG CPLEX   32.2.0 rc62c018 Released Aug 26, 2020 WEI x86 64bit/MS Window
+*** This solver runs with a demo license. No commercial use.
+Cplex 12.10.0.0
+
+Space for names approximately 0.00 Mb
+Use option 'names no' to turn use of names off
+LP status(1): optimal
+Cplex Time: 0.03sec (det. 0.02 ticks)
+Optimal solution found.
+Objective :          22.333333
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU funcOBjet~          .              .              .             1.0000      
+
+  funcOBjetivo  Funci贸n objetivo
+
+---- EQU resDia  Restricci贸n de trabajadores por d铆a
+
+                 LOWER          LEVEL          UPPER         MARGINAL
+
+Lunes            17.0000        17.0000        +INF            0.3333      
+Martes           13.0000        14.6667        +INF             .          
+Miercoles        15.0000        15.0000        +INF            0.3333      
+Jueves           19.0000        19.0000        +INF            0.3333      
+Viernes          14.0000        19.0000        +INF             .          
+Sabado           16.0000        16.0000        +INF            0.3333      
+Domingo          11.0000        11.0000        +INF            EPS         
+
+---- VAR x  
+
+                 LOWER          LEVEL          UPPER         MARGINAL
+
+Lunes              .             6.3333        +INF             .          
+Martes             .             5.0000        +INF             .          
+Miercoles          .             0.3333        +INF             .          
+Jueves             .             7.3333        +INF             .          
+Viernes            .              .            +INF            0.3333      
+Sabado             .             3.3333        +INF             .          
+Domingo            .              .            +INF      -5.55112E-17      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR z                 -INF           22.3333        +INF             .          
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 19:46:37 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     40 VARIABLE x.L  
+
+Lunes     6.333,    Martes    5.000,    Miercoles 0.333,    Jueves    7.333,    Sabado    3.333
+
+
+----     41 VARIABLE z.L                   =       22.333  
+
+
+EXECUTION TIME       =        0.328 SECONDS      4 MB  32.2.0 rc62c018 WEX-WEI
+
+
+USER: GAMS Demo license for Julian David Mendoza RuizG201007|0002CO-GEN
+      Universidad de los Andes, Colombia                       DL019421
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\Usuario\Desktop\Andes\Semestre VII\Modelado Optimizaci髇 y Simulaci髇\Laboratorios\Laboratorio 2\MOS\Lab2-Ejercicio6.gms
+Output     C:\Users\Usuario\Desktop\Andes\Semestre VII\Modelado Optimizaci髇 y Simulaci髇\Laboratorios\Laboratorio 2\MOS\Lab2-Ejercicio6.lst

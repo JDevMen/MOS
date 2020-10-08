@@ -1,0 +1,308 @@
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 12:49:28 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  *************************************************************************
+   2  ***      Lab2-Ejercicio1                                              ***
+   3  ***     Luis Miguel Gomez LondoÃ±o   201729597                         ***
+   4  ***     Julian David Mendoza Ruiz   201730830                         ***
+   5  *************************************************************************
+   9  Sets
+  10      o origen  /o1*o3/
+  11      d destino /d1*d2/
+  12   
+  13  *tipos de procesos, p1 kernel y p2 usuario
+  14      p procesos /p1*p2/
+  15      ;
+  16   
+  17   
+  18  Table c(o,d) costos
+  19           d1       d2
+  20  o1       300      500
+  21  o2       200      300
+  22  o3       600      300;
+  23   
+  24  Table po(p,o) procesos de origen
+  25           o1      o2      o3
+  26  p1       60      80      50
+  27  p2       80      50      50;
+  28   
+  29  Table pd (p,d) procesos de destino
+  30           d1      d2
+  31  p1       100     90
+  32  p2       60      120;
+  33   
+  34  Variables
+  35  x(o,d,p)
+  36  z;
+  37   
+  38  Equations
+  39   
+  40  funcObjetivo            Funcion objetivo
+  41  resFilas(o,p)           Cantidad de procesos ofertados por o
+  42  ResColumnas(d,p)        Cantidad de procesos recibidos por d
+  43  CantidadPos(o,d,p)      La cantidad de procesos x(o.d.p) siempre debe ser positiva
+  44  ;
+  45   
+  46  funcObjetivo            ..  z   =e= sum((o,d,p),c(o,d)*x(o,d,p));
+  47  resFilas(o,p)           ..  sum((d),x(o,d,p)) =l= po(p,o);
+  48  resColumnas(d,p)        ..  sum((o),x(o,d,p)) =e= pd(p,d);
+  49  CantidadPos(o,d,p)      ..  x(o,d,p) =g= 0;
+  50   
+  51  Model model1 /all/;
+  52   
+  53  option mip = CPLEX
+  54  Solve model1 using mip miniming z;
+  55   
+  56   
+  57   
+  58  Display o;
+  59  Display d;
+  60  Display c;
+      Display p;
+      Display po;
+      Display pd;
+  66  Display x.l;
+  67  Display z.l;
+
+
+COMPILATION TIME     =        0.015 SECONDS      3 MB  32.2.0 rc62c018 WEX-WEI
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 12:49:28 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE model1 Using MIP From line 54
+
+
+---- funcObjetivo  =E=  Funcion objetivo
+
+funcObjetivo..  - 300*x(o1,d1,p1) - 300*x(o1,d1,p2) - 500*x(o1,d2,p1) - 500*x(o1,d2,p2) - 200*x(o2,d1,p1) - 200*x(o2,d1,p2) - 300*x(o2,d2,p1) - 300*x(o2,d2,p2) - 600*x(o3,d1,p1) - 600*x(o3,d1,p2) - 300*x(o3,d2,p1) - 300*x(o3,d2,p2) + z =E= 0 ; (LHS = 0)
+     
+
+---- resFilas  =L=  Cantidad de procesos ofertados por o
+
+resFilas(o1,p1)..  x(o1,d1,p1) + x(o1,d2,p1) =L= 60 ; (LHS = 0)
+     
+resFilas(o1,p2)..  x(o1,d1,p2) + x(o1,d2,p2) =L= 80 ; (LHS = 0)
+     
+resFilas(o2,p1)..  x(o2,d1,p1) + x(o2,d2,p1) =L= 80 ; (LHS = 0)
+     
+REMAINING 3 ENTRIES SKIPPED
+
+
+---- ResColumnas  =E=  Cantidad de procesos recibidos por d
+
+ResColumnas(d1,p1)..  x(o1,d1,p1) + x(o2,d1,p1) + x(o3,d1,p1) =E= 100 ; (LHS = 0, INFES = 100 ****)
+     
+ResColumnas(d1,p2)..  x(o1,d1,p2) + x(o2,d1,p2) + x(o3,d1,p2) =E= 60 ; (LHS = 0, INFES = 60 ****)
+     
+ResColumnas(d2,p1)..  x(o1,d2,p1) + x(o2,d2,p1) + x(o3,d2,p1) =E= 90 ; (LHS = 0, INFES = 90 ****)
+     
+REMAINING ENTRY SKIPPED
+
+
+---- CantidadPos  =G=  La cantidad de procesos x(o.d.p) siempre debe ser positiva
+
+CantidadPos(o1,d1,p1)..  x(o1,d1,p1) =G= 0 ; (LHS = 0)
+     
+CantidadPos(o1,d1,p2)..  x(o1,d1,p2) =G= 0 ; (LHS = 0)
+     
+CantidadPos(o1,d2,p1)..  x(o1,d2,p1) =G= 0 ; (LHS = 0)
+     
+REMAINING 9 ENTRIES SKIPPED
+
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 12:49:28 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE model1 Using MIP From line 54
+
+
+---- x  
+
+x(o1,d1,p1)
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+     -300       funcObjetivo
+        1       resFilas(o1,p1)
+        1       ResColumnas(d1,p1)
+        1       CantidadPos(o1,d1,p1)
+
+x(o1,d1,p2)
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+     -300       funcObjetivo
+        1       resFilas(o1,p2)
+        1       ResColumnas(d1,p2)
+        1       CantidadPos(o1,d1,p2)
+
+x(o1,d2,p1)
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+     -500       funcObjetivo
+        1       resFilas(o1,p1)
+        1       ResColumnas(d2,p1)
+        1       CantidadPos(o1,d2,p1)
+
+REMAINING 9 ENTRIES SKIPPED
+
+---- z  
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       funcObjetivo
+
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 12:49:28 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE model1 Using MIP From line 54
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           4     SINGLE EQUATIONS           23
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES           13
+NON ZERO ELEMENTS            49
+
+
+GENERATION TIME      =        0.000 SECONDS      4 MB  32.2.0 rc62c018 WEX-WEI
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 12:49:28 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE model1 Using MIP From line 54
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   model1              OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  54
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      1 Optimal                   
+**** OBJECTIVE VALUE           111000.0000
+
+ RESOURCE USAGE, LIMIT          0.015 10000000000.000
+ ITERATION COUNT, LIMIT         5    2147483647
+
+IBM ILOG CPLEX   32.2.0 rc62c018 Released Aug 26, 2020 WEI x86 64bit/MS Window
+*** This solver runs with a demo license. No commercial use.
+Cplex 12.10.0.0
+
+Space for names approximately 0.00 Mb
+Use option 'names no' to turn use of names off
+LP status(1): optimal
+Cplex Time: 0.00sec (det. 0.03 ticks)
+Optimal solution found.
+Objective :      111000.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU funcObjet~          .              .              .             1.0000      
+
+  funcObjetivo  Funcion objetivo
+
+---- EQU resFilas  Cantidad de procesos ofertados por o
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+o1.p1        -INF           60.0000        60.0000          .          
+o1.p2        -INF           80.0000        80.0000          .          
+o2.p1        -INF           80.0000        80.0000      -100.0000      
+o2.p2        -INF           50.0000        50.0000      -200.0000      
+o3.p1        -INF           50.0000        50.0000      -100.0000      
+o3.p2        -INF           50.0000        50.0000      -200.0000      
+
+---- EQU ResColumnas  Cantidad de procesos recibidos por d
+
+             LOWER          LEVEL          UPPER         MARGINAL
+
+d1.p1       100.0000       100.0000       100.0000       300.0000      
+d1.p2        60.0000        60.0000        60.0000       300.0000      
+d2.p1        90.0000        90.0000        90.0000       400.0000      
+d2.p2       120.0000       120.0000       120.0000       500.0000      
+
+---- EQU CantidadPos  La cantidad de procesos x(o.d.p) siempre debe ser positiva
+
+                LOWER          LEVEL          UPPER         MARGINAL
+
+o1.d1.p1          .            60.0000        +INF             .          
+o1.d1.p2          .            60.0000        +INF             .          
+o1.d2.p1          .              .            +INF          100.0000      
+o1.d2.p2          .            20.0000        +INF             .          
+o2.d1.p1          .            40.0000        +INF             .          
+o2.d1.p2          .              .            +INF          100.0000      
+o2.d2.p1          .            40.0000        +INF             .          
+o2.d2.p2          .            50.0000        +INF             .          
+o3.d1.p1          .              .            +INF          400.0000      
+o3.d1.p2          .              .            +INF          500.0000      
+o3.d2.p1          .            50.0000        +INF             .          
+o3.d2.p2          .            50.0000        +INF             .          
+
+---- VAR x  
+
+                LOWER          LEVEL          UPPER         MARGINAL
+
+o1.d1.p1        -INF           60.0000        +INF             .          
+o1.d1.p2        -INF           60.0000        +INF             .          
+o1.d2.p1        -INF             .            +INF             .          
+o1.d2.p2        -INF           20.0000        +INF             .          
+o2.d1.p1        -INF           40.0000        +INF             .          
+o2.d1.p2        -INF             .            +INF             .          
+o2.d2.p1        -INF           40.0000        +INF             .          
+o2.d2.p2        -INF           50.0000        +INF             .          
+o3.d1.p1        -INF             .            +INF             .          
+o3.d1.p2        -INF             .            +INF             .          
+o3.d2.p1        -INF           50.0000        +INF             .          
+o3.d2.p2        -INF           50.0000        +INF             .          
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR z                 -INF       111000.0000        +INF             .          
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 12:49:28 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     58 SET o  origen
+
+o1,    o2,    o3
+
+
+----     59 SET d  destino
+
+d1,    d2
+
+
+----     60 PARAMETER c  costos
+
+            d1          d2
+
+o1     300.000     500.000
+o2     200.000     300.000
+o3     600.000     300.000
+
+
+----     66 VARIABLE x.L  
+
+               p1          p2
+
+o1.d1      60.000      60.000
+o1.d2                  20.000
+o2.d1      40.000
+o2.d2      40.000      50.000
+o3.d2      50.000      50.000
+
+
+----     67 VARIABLE z.L                   =   111000.000  
+
+
+EXECUTION TIME       =        0.047 SECONDS      4 MB  32.2.0 rc62c018 WEX-WEI
+
+
+USER: GAMS Demo license for Julian David Mendoza RuizG201007|0002CO-GEN
+      Universidad de los Andes, Colombia                       DL019421
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\Usuario\Desktop\Andes\Semestre VII\Modelado Optimización y Simulación\Laboratorios\Laboratorio 2\MOS\Lab2-Ejercicio1.gms
+Output     C:\Users\Usuario\Desktop\Andes\Semestre VII\Modelado Optimización y Simulación\Laboratorios\Laboratorio 2\MOS\Lab2-Ejercicio1.lst

@@ -1,0 +1,23 @@
+B 3 C o m p i l a t i o n
+B 73 Equation Listing    SOLVE model1 Using MIP From line 54
+D 76 funcObjetivo
+D 81 resFilas
+D 92 ResColumnas
+D 103 CantidadPos
+B 115 Column Listing      SOLVE model1 Using MIP From line 54
+E 118 x
+E 143 z
+B 151 Model Statistics    SOLVE model1 Using MIP From line 54
+B 164 Solution Report     SOLVE model1 Using MIP From line 54
+F 194 funcObjetivo
+F 198 resFilas
+F 209 ResColumnas
+F 218 CantidadPos
+G 235 x
+G 254 z
+B 262 E x e c u t i o n
+I 262 o
+I 268 d
+I 273 c
+I 282 x
+I 294 z
