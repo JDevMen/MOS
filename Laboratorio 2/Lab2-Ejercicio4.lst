@@ -1,0 +1,270 @@
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 19:48:35 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  *************************************************************************
+   2  ***      Lab2-Ejercicio4                                              ***
+   3  ***     Luis Miguel Gomez Londo帽o   201729597                         ***
+   4  ***     Julian David Mendoza Ruiz   201730830                         ***
+   5  *************************************************************************
+   7   
+   8  Scalar a;
+   9   
+  10  a= 15;
+  11   
+  12  Sets
+  13      i pueblos /p1*p6/
+  14  alias(j,i);
+  15   
+  16  Table t(i,j) tiempos
+  17           p1      p2      p3      p4      p5      p6
+  18  p1       0       10      20      30      30      20
+  19  p2       10      0       25      35      20      10
+  20  p3       20      25      0       15      30      20
+  21  p4       30      35      15      0       15      25
+  22  p5       30      20      30      15      0       14
+  23  p6       20      10      20      25      14      0;
+  24   
+  25  Parameter ad(i,j) adyacencia entre dos pueblos;
+  26   
+  27  loop((i,j),
+  28      if(t(i,j) <=15,
+  29      ad(i,j) = 1
+  30      else
+  31      ad(i,j) = 0
+  32          );
+  33      );
+  34   
+  35  Binary Variable x(i)  poner una estaci贸n en el pueblo i;
+  36   
+  37  Variable z              Funcion objetivo;
+  38   
+  39  Equations
+  40  funcObjetivo        Funcion objetivo
+  41   
+  42  adyacencia(i)       restricci贸n de elegir solo aquellos costos que sean adyacentes
+  43   
+  44  ;
+  45   
+  46  funcObjetivo        ..  z   =e= sum((i),x(i));
+  47   
+  48  adyacencia(i)       ..  sum((j),x(j)*ad(i,j)) =g= 1;
+  49   
+  50  Model model1 /all/ ;
+  51  option mip=CPLEX
+  52  Solve model1 using mip minimizing z;
+  53   
+  54   
+  55  Display z.l;
+  56  Display x.l;
+  57   
+  58  Display i;
+  59  Display j;
+  60  Display t;
+  61  Display ad;
+  62   
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  32.2.0 rc62c018 WEX-WEI
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 19:48:35 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE model1 Using MIP From line 52
+
+
+---- funcObjetivo  =E=  Funcion objetivo
+
+funcObjetivo..  - x(p1) - x(p2) - x(p3) - x(p4) - x(p5) - x(p6) + z =E= 0 ; (LHS = 0)
+     
+
+---- adyacencia  =G=  restricci贸n de elegir solo aquellos costos que sean adyacentes
+
+adyacencia(p1)..  x(p1) + x(p2) =G= 1 ; (LHS = 0, INFES = 1 ****)
+     
+adyacencia(p2)..  x(p1) + x(p2) + x(p6) =G= 1 ; (LHS = 0, INFES = 1 ****)
+     
+adyacencia(p3)..  x(p3) + x(p4) =G= 1 ; (LHS = 0, INFES = 1 ****)
+     
+REMAINING 3 ENTRIES SKIPPED
+
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 19:48:35 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE model1 Using MIP From line 52
+
+
+---- x  poner una estaci贸n en el pueblo i
+
+x(p1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       funcObjetivo
+        1       adyacencia(p1)
+        1       adyacencia(p2)
+
+x(p2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       funcObjetivo
+        1       adyacencia(p1)
+        1       adyacencia(p2)
+        1       adyacencia(p6)
+
+x(p3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -1       funcObjetivo
+        1       adyacencia(p3)
+        1       adyacencia(p4)
+
+REMAINING 3 ENTRIES SKIPPED
+
+---- z  Funcion objetivo
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       funcObjetivo
+
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 19:48:35 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE model1 Using MIP From line 52
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           2     SINGLE EQUATIONS            7
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            7
+NON ZERO ELEMENTS            23     DISCRETE VARIABLES          6
+
+
+GENERATION TIME      =        0.031 SECONDS      4 MB  32.2.0 rc62c018 WEX-WEI
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 19:48:35 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE model1 Using MIP From line 52
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   model1              OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  52
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      1 Optimal                   
+**** OBJECTIVE VALUE                2.0000
+
+ RESOURCE USAGE, LIMIT          0.015 10000000000.000
+ ITERATION COUNT, LIMIT         0    2147483647
+
+IBM ILOG CPLEX   32.2.0 rc62c018 Released Aug 26, 2020 WEI x86 64bit/MS Window
+*** This solver runs with a demo license. No commercial use.
+Cplex 12.10.0.0
+
+Space for names approximately 0.00 Mb
+Use option 'names no' to turn use of names off
+MIP status(101): integer optimal solution
+Cplex Time: 0.00sec (det. 0.01 ticks)
+Fixing integer variables, and solving final LP...
+Fixed MIP status(1): optimal
+Cplex Time: 0.00sec (det. 0.00 ticks)
+Proven optimal solution.
+
+MIP Solution:            2.000000    (0 iterations, 0 nodes)
+Final Solve:             2.000000    (0 iterations)
+
+Best possible:           2.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU funcObjet~          .              .              .             1.0000      
+
+  funcObjetivo  Funcion objetivo
+
+---- EQU adyacencia  restricci贸n de elegir solo aquellos costos que sean adyacentes
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+p1         1.0000         1.0000        +INF             .          
+p2         1.0000         1.0000        +INF             .          
+p3         1.0000         1.0000        +INF             .          
+p4         1.0000         1.0000        +INF             .          
+p5         1.0000         1.0000        +INF             .          
+p6         1.0000         1.0000        +INF             .          
+
+---- VAR x  poner una estaci贸n en el pueblo i
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+p1          .              .             1.0000         1.0000      
+p2          .             1.0000         1.0000         1.0000      
+p3          .              .             1.0000         1.0000      
+p4          .             1.0000         1.0000         1.0000      
+p5          .              .             1.0000         1.0000      
+p6          .              .             1.0000         1.0000      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR z                 -INF            2.0000        +INF             .          
+
+  z  Funcion objetivo
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 19:48:35 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     55 VARIABLE z.L                   =        2.000  Funcion objetivo
+
+----     56 VARIABLE x.L  poner una estaci贸n en el pueblo i
+
+p2 1.000,    p4 1.000
+
+
+----     58 SET i  pueblos
+
+p1,    p2,    p3,    p4,    p5,    p6
+
+
+----     59 SET j  Aliased with i
+p1,    p2,    p3,    p4,    p5,    p6
+
+
+----     60 PARAMETER t  tiempos
+
+            p1          p2          p3          p4          p5          p6
+
+p1                  10.000      20.000      30.000      30.000      20.000
+p2      10.000                  25.000      35.000      20.000      10.000
+p3      20.000      25.000                  15.000      30.000      20.000
+p4      30.000      35.000      15.000                  15.000      25.000
+p5      30.000      20.000      30.000      15.000                  14.000
+p6      20.000      10.000      20.000      25.000      14.000
+
+
+----     61 PARAMETER ad  adyacencia entre dos pueblos
+
+            p1          p2          p3          p4          p5          p6
+
+p1       1.000       1.000
+p2       1.000       1.000                                           1.000
+p3                               1.000       1.000
+p4                               1.000       1.000       1.000
+p5                                           1.000       1.000       1.000
+p6                   1.000                               1.000       1.000
+
+
+
+EXECUTION TIME       =        0.156 SECONDS      4 MB  32.2.0 rc62c018 WEX-WEI
+
+
+USER: GAMS Demo license for Julian David Mendoza RuizG201007|0002CO-GEN
+      Universidad de los Andes, Colombia                       DL019421
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\Usuario\Desktop\Andes\Semestre VII\Modelado Optimizaci髇 y Simulaci髇\Laboratorios\Laboratorio 2\MOS\Lab2-Ejercicio4.gms
+Output     C:\Users\Usuario\Desktop\Andes\Semestre VII\Modelado Optimizaci髇 y Simulaci髇\Laboratorios\Laboratorio 2\MOS\Lab2-Ejercicio4.lst

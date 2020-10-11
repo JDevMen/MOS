@@ -1,0 +1,30 @@
+B 3 C o m p i l a t i o n
+B 93 Equation Listing    SOLVE model1 Using MIP From line 73
+D 96 funcObjetivo
+D 101 resTitulares
+D 106 resDefensa
+D 111 resCentro
+D 116 resAtaque
+D 121 resPromedio
+D 132 resTitular
+B 138 Column Listing      SOLVE model1 Using MIP From line 73
+E 141 x
+E 178 z
+B 186 Model Statistics    SOLVE model1 Using MIP From line 73
+B 199 Solution Report     SOLVE model1 Using MIP From line 73
+F 238 funcObjetivo
+F 239 resTitulares
+F 240 resDefensa
+F 241 resCentro
+F 242 resAtaque
+F 250 resPromedio
+F 261 resTitular
+G 265 x
+G 279 z
+B 289 E x e c u t i o n
+I 289 x
+I 296 z
+I 298 resDefensa
+I 300 resCentro
+I 302 resAtaque
+I 303 resPromedio

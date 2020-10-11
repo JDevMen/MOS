@@ -1,0 +1,28 @@
+B 3 C o m p i l a t i o n
+B 61 Equation Listing    SOLVE model1 Using MIP From line 49
+D 64 objectiveFunction
+D 69 tubo1
+D 74 tubo2
+D 79 tubo3
+D 84 tubo4
+D 89 tubo5
+D 94 tubo6
+D 99 tubo7
+B 105 Column Listing      SOLVE model1 Using MIP From line 49
+E 108 p
+E 127 z
+B 135 Model Statistics    SOLVE model1 Using MIP From line 49
+B 148 Solution Report     SOLVE model1 Using MIP From line 49
+F 187 objectiveFunction
+F 188 tubo1
+F 189 tubo2
+F 190 tubo3
+F 191 tubo4
+F 192 tubo5
+F 193 tubo6
+F 194 tubo7
+G 205 p
+G 232 z
+B 242 E x e c u t i o n
+I 242 p
+I 249 z

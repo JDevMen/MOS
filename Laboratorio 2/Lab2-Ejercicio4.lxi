@@ -1,0 +1,20 @@
+B 3 C o m p i l a t i o n
+B 72 Equation Listing    SOLVE model1 Using MIP From line 52
+D 75 funcObjetivo
+D 80 adyacencia
+B 92 Column Listing      SOLVE model1 Using MIP From line 52
+E 95 x
+E 118 z
+B 126 Model Statistics    SOLVE model1 Using MIP From line 52
+B 139 Solution Report     SOLVE model1 Using MIP From line 52
+F 178 funcObjetivo
+F 182 adyacencia
+G 193 x
+G 206 z
+B 216 E x e c u t i o n
+I 218 z
+I 219 x
+I 224 i
+I 230 j
+I 233 t
+I 245 ad

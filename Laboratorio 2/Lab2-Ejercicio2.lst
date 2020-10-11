@@ -1,0 +1,321 @@
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 19:48:20 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  *************************************************************************
+   2  ***      Lab2-Ejercicio2                                              ***
+   3  ***     Luis Miguel Gomez Londo帽o   201729597                         ***
+   4  ***     Julian David Mendoza Ruiz   201730830                         ***
+   5  *************************************************************************
+   7   
+   8  Scalar habilidad;
+   9  habilidad = 2;
+  10   
+  11  Scalar titulares;
+  12  titulares = 5;
+  13   
+  14  Sets
+  15   
+  16      j jugadores /j1*j7/
+  17      r rol /ataque,centro, defensa/
+  18      h habilidad /control, disparo, rebote, defensa/
+  19      ;
+  20  Parameters
+  21      min(r) minimo de jugadores de cada rol
+  22      /ataque 2,centro 1, defensa 4 /
+  23  ;
+  24   
+  25  Table p(j,r) jugadores y sus roles
+  26           ataque       centro      defensa
+  27  j1       1            0           0
+  28  j2       0            1           0
+  29  j3       1            0           1
+  30  j4       0            1           1
+  31  j5       1            0           1
+  32  j6       0            1           1
+  33  j7       1            0           1;
+  34   
+  35  Table c (j,h) Capacidades de cada jugador
+  36           control disparo rebote  defensa
+  37  j1       3       3       1       3
+  38  j2       2       1       3       2
+  39  j3       2       3       2       2
+  40  j4       1       3       3       1
+  41  j5       3       3       3       3
+  42  j6       3       1       2       3
+  43  j7       3       2       2       1
+  44  ;
+  45   
+  46  Binary Variable x(j)   elegir o no a un jugador;
+  47  variable z               funcion objetivo;
+  48   
+  49   
+  50  Equations
+  51   
+  52  funcObjetivo    funcion objetivo
+  53  resTitulares    Restricci贸n de cuantos jugadores titulares deben haber
+  54  resDefensa      Restricci贸n de cuantos jugadores defensivos deben haber
+  55  resCentro       Restricci贸n de cuantos jugadores de centro deben haber
+  56  resAtaque       Restricci贸n de cuantos jugadores de ataque deben haber
+  57  resPromedio(h)  Restricci贸n del promedio que deben haber por cada habilidad
+  58  resTitular      Restricci贸n de ciertos jugadores deben ser titulares
+  59  ;
+  60   
+  61  funcObjetivo    ..  z   =e= sum((j),c(j,"defensa")*x(j));
+  62  resTitulares    ..  sum((j),x(j)) =e= titulares;
+  63  resDefensa      ..  sum((j),p(j,"defensa")*x(j)) =g= min("defensa");
+  64  resCentro       ..  sum((j),p(j,"centro")*x(j)) =g= min("centro");
+  65  resAtaque       ..  sum((j),p(j,"ataque")*x(j)) =g= min("ataque");
+  66  resPromedio(h)  ..  (sum((j),c(j,h)*x(j)))/titulares =g= habilidad;
+  67  resTitular      ..  x('j2')+x('j3') =e= 1;
+  68   
+  69   
+  70  Model model1 /all/;
+  71   
+  72  option mip=CPLEX;
+  73  Solve model1 using mip maximizing z;
+  74   
+  75  Display x.l;
+  76  Display z.l;
+  77  Display resDefensa.l;
+  78  Display resCentro.l;
+  79  Display resAtaque.l;
+  80  Display resPromedio.l;
+  81   
+  82   
+  83   
+
+
+COMPILATION TIME     =        0.015 SECONDS      3 MB  32.2.0 rc62c018 WEX-WEI
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 19:48:20 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE model1 Using MIP From line 73
+
+
+---- funcObjetivo  =E=  funcion objetivo
+
+funcObjetivo..  - 3*x(j1) - 2*x(j2) - 2*x(j3) - x(j4) - 3*x(j5) - 3*x(j6) - x(j7) + z =E= 0 ; (LHS = 0)
+     
+
+---- resTitulares  =E=  Restricci贸n de cuantos jugadores titulares deben haber
+
+resTitulares..  x(j1) + x(j2) + x(j3) + x(j4) + x(j5) + x(j6) + x(j7) =E= 5 ; (LHS = 0, INFES = 5 ****)
+     
+
+---- resDefensa  =G=  Restricci贸n de cuantos jugadores defensivos deben haber
+
+resDefensa..  x(j3) + x(j4) + x(j5) + x(j6) + x(j7) =G= 4 ; (LHS = 0, INFES = 4 ****)
+     
+
+---- resCentro  =G=  Restricci贸n de cuantos jugadores de centro deben haber
+
+resCentro..  x(j2) + x(j4) + x(j6) =G= 1 ; (LHS = 0, INFES = 1 ****)
+     
+
+---- resAtaque  =G=  Restricci贸n de cuantos jugadores de ataque deben haber
+
+resAtaque..  x(j1) + x(j3) + x(j5) + x(j7) =G= 2 ; (LHS = 0, INFES = 2 ****)
+     
+
+---- resPromedio  =G=  Restricci贸n del promedio que deben haber por cada habilidad
+
+resPromedio(defensa)..  0.6*x(j1) + 0.4*x(j2) + 0.4*x(j3) + 0.2*x(j4) + 0.6*x(j5) + 0.6*x(j6) + 0.2*x(j7) =G= 2 ; (LHS = 0, INFES = 2 ****)
+     
+resPromedio(control)..  0.6*x(j1) + 0.4*x(j2) + 0.4*x(j3) + 0.2*x(j4) + 0.6*x(j5) + 0.6*x(j6) + 0.6*x(j7) =G= 2 ; (LHS = 0, INFES = 2 ****)
+     
+resPromedio(disparo)..  0.6*x(j1) + 0.2*x(j2) + 0.6*x(j3) + 0.6*x(j4) + 0.6*x(j5) + 0.2*x(j6) + 0.4*x(j7) =G= 2 ; (LHS = 0, INFES = 2 ****)
+     
+REMAINING ENTRY SKIPPED
+
+
+---- resTitular  =E=  Restricci贸n de ciertos jugadores deben ser titulares
+
+resTitular..  x(j2) + x(j3) =E= 1 ; (LHS = 0, INFES = 1 ****)
+     
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 19:48:20 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE model1 Using MIP From line 73
+
+
+---- x  elegir o no a un jugador
+
+x(j1)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -3       funcObjetivo
+        1       resTitulares
+        1       resAtaque
+        0.6     resPromedio(defensa)
+        0.6     resPromedio(control)
+        0.6     resPromedio(disparo)
+        0.2     resPromedio(rebote)
+
+x(j2)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -2       funcObjetivo
+        1       resTitulares
+        1       resCentro
+        0.4     resPromedio(defensa)
+        0.4     resPromedio(control)
+        0.2     resPromedio(disparo)
+        0.6     resPromedio(rebote)
+        1       resTitular
+
+x(j3)
+                (.LO, .L, .UP, .M = 0, 0, 1, 0)
+       -2       funcObjetivo
+        1       resTitulares
+        1       resDefensa
+        1       resAtaque
+        0.4     resPromedio(defensa)
+        0.4     resPromedio(control)
+        0.6     resPromedio(disparo)
+        0.4     resPromedio(rebote)
+        1       resTitular
+
+REMAINING 4 ENTRIES SKIPPED
+
+---- z  funcion objetivo
+
+z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       funcObjetivo
+
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 19:48:20 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE model1 Using MIP From line 73
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           7     SINGLE EQUATIONS           10
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES            8
+NON ZERO ELEMENTS            57     DISCRETE VARIABLES          7
+
+
+GENERATION TIME      =        0.000 SECONDS      4 MB  32.2.0 rc62c018 WEX-WEI
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 19:48:20 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE model1 Using MIP From line 73
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   model1              OBJECTIVE  z
+     TYPE    MIP                 DIRECTION  MAXIMIZE
+     SOLVER  CPLEX               FROM LINE  73
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      1 Optimal                   
+**** OBJECTIVE VALUE               12.0000
+
+ RESOURCE USAGE, LIMIT          0.031 10000000000.000
+ ITERATION COUNT, LIMIT         0    2147483647
+
+IBM ILOG CPLEX   32.2.0 rc62c018 Released Aug 26, 2020 WEI x86 64bit/MS Window
+*** This solver runs with a demo license. No commercial use.
+Cplex 12.10.0.0
+
+Space for names approximately 0.00 Mb
+Use option 'names no' to turn use of names off
+MIP status(101): integer optimal solution
+Cplex Time: 0.02sec (det. 0.04 ticks)
+Fixing integer variables, and solving final LP...
+Fixed MIP status(1): optimal
+Cplex Time: 0.00sec (det. 0.01 ticks)
+Proven optimal solution.
+
+MIP Solution:           12.000000    (0 iterations, 0 nodes)
+Final Solve:            12.000000    (0 iterations)
+
+Best possible:          12.000000
+Absolute gap:            0.000000
+Relative gap:            0.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU funcObjet~          .              .              .             1.0000      
+---- EQU resTitula~         5.0000         5.0000         5.0000          .          
+---- EQU resDefensa         4.0000         4.0000        +INF             .          
+---- EQU resCentro          1.0000         2.0000        +INF             .          
+---- EQU resAtaque          2.0000         3.0000        +INF             .          
+
+  funcObjetivo  funcion objetivo
+  resTitulares  Restricci贸n de cuantos jugadores titulares deben haber
+  resDefensa  Restricci贸n de cuantos jugadores defensivos deben haber
+  resCentro  Restricci贸n de cuantos jugadores de centro deben haber
+  resAtaque  Restricci贸n de cuantos jugadores de ataque deben haber
+
+---- EQU resPromedio  Restricci贸n del promedio que deben haber por cada habilidad
+
+               LOWER          LEVEL          UPPER         MARGINAL
+
+defensa         2.0000         2.4000        +INF             .          
+control         2.0000         2.4000        +INF             .          
+disparo         2.0000         2.6000        +INF             .          
+rebote          2.0000         2.2000        +INF             .          
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU resTitular         1.0000         1.0000         1.0000          .          
+
+  resTitular  Restricci贸n de ciertos jugadores deben ser titulares
+
+---- VAR x  elegir o no a un jugador
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+j1          .             1.0000         1.0000         3.0000      
+j2          .              .             1.0000         2.0000      
+j3          .             1.0000         1.0000         2.0000      
+j4          .             1.0000         1.0000         1.0000      
+j5          .             1.0000         1.0000         3.0000      
+j6          .             1.0000         1.0000         3.0000      
+j7          .              .             1.0000         1.0000      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR z                 -INF           12.0000        +INF             .          
+
+  z  funcion objetivo
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 32.2.0  rc62c018 Released Aug 26, 2020 WEX-WEI x86 64bit/MS Windows - 10/07/20 19:48:20 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----     75 VARIABLE x.L  elegir o no a un jugador
+
+j1 1.000,    j3 1.000,    j4 1.000,    j5 1.000,    j6 1.000
+
+
+----     76 VARIABLE z.L                   =       12.000  funcion objetivo
+
+----     77 EQUATION resDefensa.L          =        4.000  Restricci贸n de cuantos jugadores defensivos deben haber
+
+----     78 EQUATION resCentro.L           =        2.000  Restricci贸n de cuantos jugadores de centro deben haber
+
+----     79 EQUATION resAtaque.L           =        3.000  Restricci贸n de cuantos jugadores de ataque deben haber
+
+----     80 EQUATION resPromedio.L  Restricci贸n del promedio que deben haber por cada habilidad
+
+defensa 2.400,    control 2.400,    disparo 2.600,    rebote  2.200
+
+
+
+EXECUTION TIME       =        0.125 SECONDS      4 MB  32.2.0 rc62c018 WEX-WEI
+
+
+USER: GAMS Demo license for Julian David Mendoza RuizG201007|0002CO-GEN
+      Universidad de los Andes, Colombia                       DL019421
+
+
+**** FILE SUMMARY
+
+Input      C:\Users\Usuario\Desktop\Andes\Semestre VII\Modelado Optimizaci髇 y Simulaci髇\Laboratorios\Laboratorio 2\MOS\Lab2-Ejercicio2.gms
+Output     C:\Users\Usuario\Desktop\Andes\Semestre VII\Modelado Optimizaci髇 y Simulaci髇\Laboratorios\Laboratorio 2\MOS\Lab2-Ejercicio2.lst

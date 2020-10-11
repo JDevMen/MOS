@@ -1,0 +1,21 @@
+B 3 C o m p i l a t i o n
+B 61 Equation Listing    SOLVE model1 Using MIP From line 46
+D 64 objectiveFunction
+D 69 nodoFuente
+D 74 nodoDestino
+D 79 nodoTransicion
+B 91 Column Listing      SOLVE model1 Using MIP From line 46
+E 94 s
+E 114 z
+B 122 Model Statistics    SOLVE model1 Using MIP From line 46
+B 135 Solution Report     SOLVE model1 Using MIP From line 46
+F 174 objectiveFunction
+F 178 nodoFuente
+F 184 nodoDestino
+F 190 nodoTransicion
+G 200 s
+G 256 z
+B 266 E x e c u t i o n
+I 266 c
+I 280 s
+I 289 z
